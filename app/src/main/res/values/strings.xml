@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TODOListApp</string>
+    <string name="element_text">\"test bazinga!\"</string>
+</resources>
