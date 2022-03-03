@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/root">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -41,6 +42,7 @@
             android:layout_marginTop="5dp"
             android:padding="10dp"
             tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="1dp" />
+            tools:layout_editor_absoluteY="1dp"
+            tools:listitem="@layout/text_row_item"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

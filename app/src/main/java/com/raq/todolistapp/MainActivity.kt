@@ -1,6 +1,5 @@
 package com.raq.todolistapp
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -9,12 +8,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.raq.todolistapp.dialogs.EditTaskDialog
 import com.raq.todolistapp.interfaces.OnItemClickListener
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnItemClickListener {
 
+
+    lateinit var customAdapter: CustomAdapter
+    lateinit var layoutManager: LinearLayoutManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         val addTaskButton = findViewById<Button>(R.id.addTaskButton)
@@ -26,10 +33,11 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         for (i in 1..100) {
             taskList.add(Task("Task $i", "Description $i"))
         }
-        val customAdapter = CustomAdapter(taskList, this)
+        customAdapter = CustomAdapter(taskList, this)
+        layoutManager = LinearLayoutManager(this)
 
         recyclerView.adapter = customAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
 
     }
 
@@ -37,39 +45,36 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         Log.d(this@MainActivity.toString(), "item clicked")
 
         Toast.makeText(this, "Clicked item ${task.title}", Toast.LENGTH_LONG).show()
-        startActivity(createIntentForEditItemActivity(task))
-    }
-
-    fun createIntentForEditItemActivity(task: Task): Intent {
-        var intent: Intent = Intent(this, EditItemActivity::class.java)
-        intent.putExtra(EditItemActivity.TITLE, task.title)
-        intent.putExtra(EditItemActivity.DESCRIPTION, task.description)
-        return intent
-    }
-
-
-    override fun onItemButtonClicked(task: Task, position: Int) {
-        Log.d(this@MainActivity.toString(), "item button clicked")
-        val adapter = getRecyclerView().adapter as CustomAdapter
-        adapter.deleteTask(task, position)
-    }
-
-    private fun getRecyclerView(): RecyclerView {
-        return findViewById<RecyclerView>(R.id.recyclerView)
-    }
-
-    private fun addTask() {
-        val adapter = getRecyclerView().adapter as CustomAdapter
-        val editText = findViewById<EditText>(R.id.newItemTitle)
-        var text: String = editText.text.toString()
-        if (text.isNotEmpty()) {
-            adapter.addTask(Task(text, ""), 0)
+        EditTaskDialog.show(this, task) { title, description ->
+            customAdapter.editTask(task, position, title, description)
         }
     }
 
-    fun notifyAdapter(position: Int) {
-        val recyclerView = getRecyclerView()
-        recyclerView.adapter?.notifyItemChanged(position)
+    override fun onItemButtonClicked(task: Task, position: Int) {
+        Log.d(this@MainActivity.toString(), "item button clicked")
+        val adapter = recyclerView.adapter as CustomAdapter
+
+        val lastDeletedTask = task
+        val lastDeletedTaskPosition = position
+
+        adapter.deleteTask(task, position)
+        Snackbar.make(root, "SnackBar", Snackbar.LENGTH_LONG).setAction("Undo") {
+            addTask(task, position)
+        }.show()
+
     }
 
+    private fun addTask(task:Task, position:Int)
+    {
+        customAdapter.addTask(task, position)
+        recyclerView.smoothScrollToPosition(position)
+    }
+
+    private fun addTask() {
+        val editText = findViewById<EditText>(R.id.newItemTitle)
+        val text: String = editText.text.toString()
+        if (text.isNotEmpty()) {
+            customAdapter.addTask(Task(text, ""), 0)
+        }
+    }
 }

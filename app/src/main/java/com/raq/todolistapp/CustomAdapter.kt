@@ -14,7 +14,8 @@ class CustomAdapter(
     private val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
     private var taskList: ArrayList<Task> = ArrayList<Task>()
-    private val TAG = this.javaClass.simpleName
+    private val TAG = this::class.simpleName
+
     fun deleteTask(task: Task, position: Int) {
         Log.d(this.javaClass.simpleName, "removed task")
         taskList.remove(task)
@@ -26,7 +27,10 @@ class CustomAdapter(
         Log.d(TAG, "added task")
         taskList.add(position, task)
         this.notifyItemInserted(position)
+
     }
+
+
 
     init {
         taskList = tasks
@@ -61,5 +65,12 @@ class CustomAdapter(
 
     override fun getItemCount(): Int {
         return taskList.size
+    }
+
+    fun editTask(task: Task, position: Int, title: String, description: String) {
+        task.title = title
+        task.description = description
+        taskList[position] = task
+        this.notifyItemChanged(position)
     }
 }
