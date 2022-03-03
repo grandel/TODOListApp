@@ -1,15 +1,19 @@
-package com.raq.todolistapp
+package com.raq.todolistapp.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
-import com.google.android.material.dialog.MaterialDialogs
+import androidx.appcompat.app.AppCompatActivity
+import com.raq.todolistapp.R
+import com.raq.todolistapp.databinding.ActivityEditItemBinding
 
 class EditItemActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityEditItemBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_item)
+        binding = ActivityEditItemBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         val editItemTitle = findViewById<TextView>(R.id.editItemTitle)
         val editItemDescription = findViewById<TextView>(R.id.editItemDescription)

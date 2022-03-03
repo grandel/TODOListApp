@@ -27,7 +27,6 @@ class CustomAdapter(
         Log.d(TAG, "added task")
         taskList.add(position, task)
         this.notifyItemInserted(position)
-
     }
 
 
