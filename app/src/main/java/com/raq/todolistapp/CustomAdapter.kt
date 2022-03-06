@@ -32,6 +32,7 @@ class CustomAdapter(
     fun deleteTask(task: Task, position: Int) {
         Log.d(this.javaClass.simpleName, "removed task")
         taskList.remove(task)
+        AppDatabase.getDatabase(context).taskDao().delete(task)
         this.notifyItemRemoved(position)
         this.notifyItemRangeChanged(position, taskList.size)
     }
@@ -39,6 +40,7 @@ class CustomAdapter(
     fun addTask(task: Task, position: Int) {
         Log.d(TAG, "added task")
         taskList.add(position, task)
+        AppDatabase.getDatabase(context).taskDao().insertAll(task)
         this.notifyItemInserted(position)
     }
 
