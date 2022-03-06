@@ -1,5 +1,6 @@
 package com.raq.todolistapp
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,14 +8,26 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.raq.todolistapp.databinding.TextRowItemBinding
 import com.raq.todolistapp.interfaces.OnItemClickListener
 
 class CustomAdapter(
     tasks: ArrayList<Task>,
-    private val itemClickListener: OnItemClickListener
+    private val context: Context
 ) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+    private var binding: TextRowItemBinding
+    private var view: View
+
+    private val itemClickListener: OnItemClickListener = context as OnItemClickListener
     private var taskList: ArrayList<Task> = ArrayList<Task>()
     private val TAG = this::class.simpleName
+
+
+    init {
+        taskList = tasks
+        binding = TextRowItemBinding.inflate(LayoutInflater.from(context))
+        view = binding.root
+    }
 
     fun deleteTask(task: Task, position: Int) {
         Log.d(this.javaClass.simpleName, "removed task")
@@ -29,13 +42,10 @@ class CustomAdapter(
         this.notifyItemInserted(position)
     }
 
+    class ViewHolder(binding: TextRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val deleteButton: Button = binding.deleteButton
+        val textView: TextView = binding.textView
 
-
-    init {
-        taskList = tasks
-    }
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(task: Task, position: Int, clickListener: OnItemClickListener) {
             itemView.setOnClickListener {
                 clickListener.onItemClicked(task, position)
@@ -43,17 +53,13 @@ class CustomAdapter(
             deleteButton.setOnClickListener {
                 clickListener.onItemButtonClicked(task, position)
             }
-
         }
 
-        val deleteButton: Button = view.findViewById(R.id.deleteButton)
-        val textView: TextView = view.findViewById(R.id.textView)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(viewGroup.context).inflate(R.layout.text_row_item, viewGroup, false)
-        return ViewHolder(view)
+        val binding = TextRowItemBinding.inflate(LayoutInflater.from(viewGroup.context))
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
