@@ -44,8 +44,23 @@ class CustomAdapter(
         this.notifyItemInserted(position)
     }
 
+    fun updateTask(task: Task, position: Int, title: String, description: String) {
+        task.title = title
+        task.description = description
+        taskList[position] = task
+        AppDatabase.getDatabase(context).taskDao().update(task)
+        this.notifyItemChanged(position)
+    }
+
+    fun setTasks(tasks: List<Task>) {
+        taskList.clear()
+        taskList.addAll(tasks)
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(binding: TextRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val deleteButton: Button = binding.deleteButton
+
         val textView: TextView = binding.textView
 
         fun bind(task: Task, position: Int, clickListener: OnItemClickListener) {
@@ -56,7 +71,6 @@ class CustomAdapter(
                 clickListener.onItemButtonClicked(task, position)
             }
         }
-
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -72,12 +86,5 @@ class CustomAdapter(
 
     override fun getItemCount(): Int {
         return taskList.size
-    }
-
-    fun editTask(task: Task, position: Int, title: String, description: String) {
-        task.title = title
-        task.description = description
-        taskList[position] = task
-        this.notifyItemChanged(position)
     }
 }

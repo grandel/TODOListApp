@@ -14,15 +14,18 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        //TODO change it to not execute in main thread
-        fun getDatabase(context: Context): AppDatabase = INSTANCE ?: synchronized(this) {
-            val instance = Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                "task-database"
-            ).allowMainThreadQueries().build()
-            INSTANCE = instance
-            return instance
+        fun getDatabase(context: Context): AppDatabase = INSTANCE ?: createDatabase(context)
+
+        private fun createDatabase(context: Context): AppDatabase {
+            synchronized(this) {
+                return Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "task-database"
+                ).allowMainThreadQueries().build().also {
+                    INSTANCE = it
+                }
+            }
         }
     }
 }

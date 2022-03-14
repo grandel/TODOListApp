@@ -1,14 +1,11 @@
 package com.raq.todolistapp.interfaces
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.raq.todolistapp.Task
 
 @Dao
 interface TaskDao {
-    @Query("SELECT * FROM TASK")
+    @Query("SELECT * FROM tasks")
     fun getAll(): List<Task>
 
     @Insert
@@ -16,4 +13,7 @@ interface TaskDao {
 
     @Delete
     fun delete(task: Task)
+
+    @Update
+    fun update(task: Task)
 }

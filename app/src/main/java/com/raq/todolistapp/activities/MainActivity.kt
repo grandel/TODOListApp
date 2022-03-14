@@ -12,6 +12,10 @@ import com.raq.todolistapp.Task
 import com.raq.todolistapp.databinding.ActivityMainBinding
 import com.raq.todolistapp.dialogs.EditTaskDialog
 import com.raq.todolistapp.interfaces.OnItemClickListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(), OnItemClickListener {
 
@@ -28,10 +32,15 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         binding.addTaskButton.setOnClickListener { addTask() }
 
         val recyclerView = binding.recyclerView
-        val taskList: ArrayList<Task> =
-            AppDatabase.getDatabase(this).taskDao().getAll() as ArrayList<Task>
 
-        customAdapter = CustomAdapter(taskList, this)
+        GlobalScope.launch(Dispatchers.IO) {
+            val taskList = AppDatabase.getDatabase(this@MainActivity).taskDao().getAll()
+            withContext(Dispatchers.Main) {
+                customAdapter.setTasks(taskList)
+            }
+        }
+
+        customAdapter = CustomAdapter(ArrayList(), this)
         layoutManager = LinearLayoutManager(this)
 
         recyclerView.adapter = customAdapter
@@ -44,7 +53,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
         Toast.makeText(this, "Clicked item ${task.title}", Toast.LENGTH_LONG).show()
         EditTaskDialog.show(this, task) { title, description ->
-            customAdapter.editTask(task, position, title, description)
+            customAdapter.updateTask(task, position, title, description)
         }
     }
 
