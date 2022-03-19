@@ -11,6 +11,7 @@ import com.raq.todolistapp.data.AppDatabase
 import com.raq.todolistapp.data.Task
 import com.raq.todolistapp.data.TaskRepository
 import com.raq.todolistapp.databinding.ActivityMainBinding
+import com.raq.todolistapp.dialogs.AddTaskDialog
 import com.raq.todolistapp.dialogs.EditTaskDialog
 import com.raq.todolistapp.interfaces.OnItemClickListener
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +32,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        binding.addTaskButton.setOnClickListener { addTask() }
-
+        binding.floatingActionButton.setOnClickListener { addTask() }
         presenter = MainPresenter(TaskRepository(AppDatabase.getDatabase(this)))
         val recyclerView = binding.recyclerView
 
@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         recyclerView.layoutManager = layoutManager
 
     }
+
 
     override fun onItemClicked(task: Task, position: Int) {
         Log.d(this@MainActivity.toString(), "item clicked")
@@ -76,11 +77,16 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     private fun addTask() {
-        val title: String = binding.newItemTitle.text.toString()
-        if (title.isNotEmpty()) {
-            val newTask = Task(title, "")
-            customAdapter.addTask(newTask, 0)
-            binding.recyclerView.smoothScrollToPosition(0)
+        AddTaskDialog.show(this) { task ->
+
+            customAdapter.addTask(task, 0)
         }
+
+//        val title: String = binding.newItemTitle.text.toString()
+//        if (title.isNotEmpty()) {
+//            val newTask = Task(title, "")
+//            customAdapter.addTask(newTask, 0)
+//            binding.recyclerView.smoothScrollToPosition(0)
+//        }
     }
 }

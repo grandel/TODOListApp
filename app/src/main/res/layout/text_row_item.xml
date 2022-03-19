@@ -7,22 +7,21 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="25dp">
 
         <Button
             android:id="@+id/deleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentRight="true"
-            android:text="X"
-            android:textColor="@android:color/white"
-            android:textSize="12dp" />
+            android:background="@drawable/ic_baseline_delete_24" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:text="@string/element_text" />
     </RelativeLayout>
 </FrameLayout>

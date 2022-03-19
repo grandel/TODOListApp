@@ -6,26 +6,24 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.raq.todolistapp.data.Task
 import com.raq.todolistapp.databinding.EditTaskDialogBinding
 
-class EditTaskDialog {
+class AddTaskDialog {
     companion object {
 
         fun show(
             context: Context,
-            task: Task,
-            onSuccess: (title: String, description: String) -> Unit
+            onSuccess: (task: Task) -> Unit
         ) {
             val binding: EditTaskDialogBinding =
                 EditTaskDialogBinding.inflate(LayoutInflater.from(context))
-            binding.editTextTaskTitle.setText(task.title)
-            binding.editTextTaskDescription.setText(task.description)
 
             MaterialAlertDialogBuilder(context)
-                .setTitle("Edit task").setView(binding.root)
-                .setPositiveButton("Edit") { dialog, which ->
+                .setTitle("Add task").setView(binding.root)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok) { dialog, which ->
                     val title = binding.editTextTaskTitle.text.toString()
                     val description = binding.editTextTaskDescription.text.toString()
                     if (title.isNotEmpty()) {
-                        onSuccess(title, description)
+                        onSuccess(Task(title, description))
                     }
                 }.show()
         }

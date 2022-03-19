@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity"
-    android:id="@+id/root">
+    tools:context=".ui.main.MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -16,25 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <Button
-                android:id="@+id/addTaskButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".30"
-                android:text="add" />
-
-            <EditText
-                android:id="@+id/newItemTitle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".70"
-                android:hint="New Item Title" />
-        </LinearLayout>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -43,6 +24,16 @@
             android:padding="10dp"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="1dp"
-            tools:listitem="@layout/text_row_item"/>
+            tools:listitem="@layout/text_row_item" />
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="40dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
