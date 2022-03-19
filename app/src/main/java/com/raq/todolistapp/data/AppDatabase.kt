@@ -1,4 +1,4 @@
-package com.raq.todolistapp
+package com.raq.todolistapp.data
 
 import android.content.Context
 import androidx.room.Database

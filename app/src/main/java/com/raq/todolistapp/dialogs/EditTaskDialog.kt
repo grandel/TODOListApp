@@ -3,7 +3,7 @@ package com.raq.todolistapp.dialogs
 import android.content.Context
 import android.view.LayoutInflater
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.raq.todolistapp.Task
+import com.raq.todolistapp.data.Task
 import com.raq.todolistapp.databinding.EditTaskDialogBinding
 
 class EditTaskDialog {

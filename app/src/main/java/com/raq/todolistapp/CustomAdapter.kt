@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.raq.todolistapp.data.AppDatabase
+import com.raq.todolistapp.data.Task
 import com.raq.todolistapp.databinding.TextRowItemBinding
 import com.raq.todolistapp.interfaces.OnItemClickListener
 
@@ -40,7 +42,7 @@ class CustomAdapter(
     fun addTask(task: Task, position: Int) {
         Log.d(TAG, "added task")
         taskList.add(position, task)
-        AppDatabase.getDatabase(context).taskDao().insertAll(task)
+        AppDatabase.getDatabase(context).taskDao().insert(task)
         this.notifyItemInserted(position)
     }
 

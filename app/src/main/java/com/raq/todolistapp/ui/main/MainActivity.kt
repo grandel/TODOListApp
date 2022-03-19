@@ -1,4 +1,4 @@
-package com.raq.todolistapp.activities
+package com.raq.todolistapp.ui.main
 
 import android.os.Bundle
 import android.util.Log
@@ -6,9 +6,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.raq.todolistapp.AppDatabase
 import com.raq.todolistapp.CustomAdapter
-import com.raq.todolistapp.Task
+import com.raq.todolistapp.data.AppDatabase
+import com.raq.todolistapp.data.Task
+import com.raq.todolistapp.data.TaskRepository
 import com.raq.todolistapp.databinding.ActivityMainBinding
 import com.raq.todolistapp.dialogs.EditTaskDialog
 import com.raq.todolistapp.interfaces.OnItemClickListener
@@ -23,18 +24,20 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     lateinit var customAdapter: CustomAdapter
     lateinit var layoutManager: LinearLayoutManager
 
+    private lateinit var presenter: MainPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
         binding.addTaskButton.setOnClickListener { addTask() }
 
+        presenter = MainPresenter(TaskRepository(AppDatabase.getDatabase(this)))
         val recyclerView = binding.recyclerView
 
         GlobalScope.launch(Dispatchers.IO) {
-            val taskList = AppDatabase.getDatabase(this@MainActivity).taskDao().getAll()
+            val taskList = presenter.getAllTasks()
             withContext(Dispatchers.Main) {
                 customAdapter.setTasks(taskList)
             }

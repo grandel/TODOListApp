@@ -1,4 +1,4 @@
-package com.raq.todolistapp
+package com.raq.todolistapp.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
